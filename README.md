@@ -29,6 +29,7 @@ Two benchmark datasets MNIST and Fashion-MNIST are included in this package.
 Please cite our paper if you use this code in your own work:
 
 @article{wang2019admm,
+
   title={ADMM for Efficient Deep Learning with Global Convergence},
   
   author={Wang, Junxiang and Yu, Fuxun and Chen, Xiang and Zhao, Liang},
