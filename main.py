@@ -76,7 +76,7 @@ x_test = np.array(x_test)
 y_test = np.array(y_test)
 
 num_of_neurons = 1000
-ITER = 200
+ITER = 1000
 index = 0
 W1, b1, z1, a1, W2, b2, z2, a2, W3, b3, z3 = Net(x_train, y_train, num_of_neurons)
 u=np.zeros(z3.shape)
