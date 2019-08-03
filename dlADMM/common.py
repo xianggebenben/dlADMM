@@ -60,7 +60,7 @@ def a_obj_gradient(a, W_next, b_next, z_next, u_next,v,z,rho):
 # return the result of W-subproblem
 def update_W(a_last, b, z, W_old, u,rho,alpha):
     gradients = eq1_W(a_last, W_old, b, z, u,rho)
-    gamma = 10
+    gamma = 2
     zeta = W_old - gradients / alpha
     while (eq1(a_last, zeta, b, z, u,rho) > P(zeta, alpha, a_last, W_old, b, z, u,rho)):
         alpha = alpha * gamma

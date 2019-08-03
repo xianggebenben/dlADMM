@@ -75,7 +75,7 @@ y_test = np.swapaxes(y_test, 0, 1)
 x_test = np.array(x_test)
 y_test = np.array(y_test)
 
-num_of_neurons = 800
+num_of_neurons = 1000
 ITER = 10000
 index = 0
 W1, b1, z1, a1, W2, b2, z2, a2, W3, b3, z3 = Net(x_train, y_train, num_of_neurons)
@@ -93,6 +93,9 @@ tau2 =1
 theta1 =1
 theta2 =1
 theta3 =1
+t=0
+flag =0
+count =0
 # dlADMM
 for i in range(ITER):
     pre = time.time()
@@ -109,7 +112,7 @@ for i in range(ITER):
     b1 = common.update_b(x_train, W1, z1, b1, 0, rho)
     W1 = common.update_W(x_train, b1, z1, W1, 0,rho,theta1)
     W1 = common.update_W(x_train, b1, z1, W1, 0,rho,theta1)
-    b1 = common.update_b(x_train, W1, z1, b1, 0,rho)
+    b1 = common.update_b(x_train, W1, z1, b1, 0, rho)
     z1 = common.update_z(x_train, W1, b1, a1,z1,0,0,rho)
     a1 = common.update_a(W2, b2, z2, z1, a1, 0,0,rho,tau1)
     W2 = common.update_W(a1, b2, z2, W2, 0,rho,theta2)
@@ -120,6 +123,8 @@ for i in range(ITER):
     b3 = common.update_b(a2, W3, z3, b3, u,rho)
     z3 = common.update_zl(a2, W3, b3, y_train, z3, u, rho)
     u = u +rho*(z3-mul(W3,a2)-b3)
+    r1 =np.sum((z1 - mul(W1, x_train) - b1) * (z1 - mul(W1, x_train) - b1))
+    r2 =np.sum((z2 - mul(W2, a1) - b2) * (z2 - mul(W2, a1) - b2))
     r3 = np.sum((z3 - mul(W3, a2) - b3) * (z3 - mul(W3, a2) - b3))
     linear_r[i] = r3
 
@@ -127,7 +132,9 @@ for i in range(ITER):
     obj=objective(x_train,y_train, W1, b1, z1, a1, W2, b2, z2, a2, W3, b3, z3, u,0,0,rho)
     print("obj=",obj)
     objective_value[i]=obj
-    print("linear_r=",linear_r[i])
+    print("r1=",r1)
+    print("r2=",r2)
+    print("r3=",r3)
     print("rho=",rho)
     (train_acc[i],train_cost[i])=test_accuracy(W1, b1, W2, b2, W3, b3, x_train,y_train)
     print("training cost:", train_cost[i])
@@ -136,9 +143,9 @@ for i in range(ITER):
     print("test cost:", test_cost[i])
     print("test acc:",test_acc[i])
     print("Time per iteration:", time.time() - pre)
-    if i>0 and train_cost[i]>train_cost[i-1]:
+    if i>2 and train_cost[i]>train_cost[i-1] and train_cost[i-1]>train_cost[i-2] and train_cost[i-2]>train_cost[i-3]:
         rho=np.minimum(10*rho,0.1)
-        if num_of_neurons>=200:
+        if num_of_neurons>=100:
             tau1 = tau1 * 10
             tau2 = tau2 * 10
             theta1 = theta1 * 10
