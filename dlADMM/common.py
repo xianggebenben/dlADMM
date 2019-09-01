@@ -58,7 +58,7 @@ def a_obj_gradient(a, W_next, b_next, z_next, u_next,v,z,rho):
     res=eq1_a(a, W_next, b_next, z_next, u_next,rho)+rho*(a-relu(z)+v)
     return res
 # return the result of W-subproblem
-def update_W(a_last, b, z, W_old, u,rho,alpha):
+def update_W(a_last, b, z, W_old, u,rho,alpha=1):
     gradients = eq1_W(a_last, W_old, b, z, u,rho)
     gamma = 2
     zeta = W_old - gradients / alpha
@@ -96,7 +96,7 @@ def update_zl(a_last, W, b, label, zl_old, u,rho):
     lamda = 1
     zeta = zl
     eta = 4
-    TOLERANCE = 10e-5
+    TOLERANCE = 1e-3
     for i in range(MAX_ITER):
         fzl_old = fzl
         fzl = cross_entropy_with_softmax(label, zl)+rho/2*np.sum((zl-mul(W,a_last)-b+u/rho)*(zl-mul(W,a_last)-b+u/rho))
@@ -111,7 +111,7 @@ def update_zl(a_last, W, b, label, zl_old, u,rho):
         zl = (1 - gamma) * zeta + gamma * zeta_old
     return zl
 # return the result of a-subproblem
-def update_a(W_next, b_next, z_next, z, a_old, u_next,v,rho,t):
+def update_a(W_next, b_next, z_next, z, a_old, u_next,v,rho,t=1):
     gradient = a_obj_gradient(a_old, W_next, b_next, z_next, u_next, v,z,rho)
     eta = 2
     beta=a_old-gradient/t
