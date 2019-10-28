@@ -30,7 +30,7 @@ Please cite our paper if you use this code in your own work:
 
 @inproceedings{Wang:2019:AED:3292500.3330936,
 
- author = {Wang, Junxiang and Yu, Fuxun and Chen, Xiang and Zhao, Liang},
+ author = {Wang, Junxiang and Yu, Fuxun and Chen, Xiang and Zhao, Liang}, 
  
  title = {ADMM for Efficient Deep Learning with Global Convergence},
  
