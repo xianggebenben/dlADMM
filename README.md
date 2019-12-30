@@ -28,36 +28,19 @@ Two benchmark datasets MNIST and Fashion-MNIST are included in this package.
 
 Please cite our paper if you use this code in your own work:
 
-@inproceedings{Wang:2019:AED:3292500.3330936,
-
- author = {Wang, Junxiang and Yu, Fuxun and Chen, Xiang and Zhao, Liang}, 
- 
- title = {ADMM for Efficient Deep Learning with Global Convergence},
- 
- booktitle = {Proceedings of the 25th ACM SIGKDD International Conference on Knowledge Discovery \& Data Mining},
- 
- series = {KDD '19},
- 
- year = {2019},
- 
- isbn = {978-1-4503-6201-6},
- 
- location = {Anchorage, AK, USA},
- 
- pages = {111--119},
- 
- numpages = {9},
- 
- url = {http://doi.acm.org/10.1145/3292500.3330936},
- 
- doi = {10.1145/3292500.3330936},
- 
- acmid = {3330936},
- 
- publisher = {ACM},
- 
- address = {New York, NY, USA},
- 
- keywords = {alternating direction method of multipliers, deep learning, global convergence},
- 
-} 
+@inproceedings{10.1145/3292500.3330936,
+author = {Wang, Junxiang and Yu, Fuxun and Chen, Xiang and Zhao, Liang},
+title = {ADMM for Efficient Deep Learning with Global Convergence},
+year = {2019},
+isbn = {9781450362016},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3292500.3330936},
+doi = {10.1145/3292500.3330936},
+booktitle = {Proceedings of the 25th ACM SIGKDD International Conference on Knowledge Discovery & Data Mining},
+pages = {111–119},
+numpages = {9},
+keywords = {alternating direction method of multipliers, deep learning, global convergence},
+location = {Anchorage, AK, USA},
+series = {KDD ’19}
+}
