@@ -28,7 +28,7 @@ Two benchmark datasets MNIST and Fashion-MNIST are included in this package.
 
 Please cite our paper if you use this code in your own work:
 
-@inproceedings{10.1145/3292500.3330936,
+@inproceedings{wang2019admm,
 
 author = {Wang, Junxiang and Yu, Fuxun and Chen, Xiang and Zhao, Liang},
 
@@ -46,9 +46,7 @@ url = {https://doi.org/10.1145/3292500.3330936},
 
 doi = {10.1145/3292500.3330936},
 
-booktitle = {Proceedings of the 25th ACM SIGKDD International Conference on Knowledge Discovery & Data Mining},
-
-pages = {111–119},
+booktitle = {Proceedings of the 25th ACM SIGKDD International Conference on Knowledge Discovery and Data Mining},
 
 numpages = {9},
 
