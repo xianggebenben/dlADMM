@@ -1,3 +1,5 @@
+Update: The dlADMM code is optimized without the cupy library and runs much faster. Each iteration takes several seconds.
+
 # dlADMM: Deep Learning Optimization via Alternating Direction Method of Multipliers
 This is a  implementation of deep learning Alternating Direction Method of Multipliers(dlADMM) for the task of fully-connected neural network
 problem, as described in our paper:
@@ -9,8 +11,6 @@ Junxiang Wang, Fuxun Yu, Xiang Chen, and Liang Zhao. [ADMM for Efficient Deep Le
 python setup.py install
 
 ## Requirements
-
-cupy-cuda90(>=6.0.0 is recommended)
 
 tensorflow
 
@@ -56,5 +56,5 @@ series = {KDD ’19}
 
 }
 
-By the way, the previous paper on training neural networks via ADMM "Training Neural Networks Without Gradients:
+The previous paper on training neural networks via ADMM "Training Neural Networks Without Gradients:
 A Scalable ADMM Approach" has published their code at https://gitlab.umiacs.umd.edu/tomg/admm_nets.
