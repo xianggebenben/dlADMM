@@ -1,5 +1,5 @@
-import cupy as np
-from cupy import matmul as mul
+import tensorflow as tf
+import numpy as np
 import sys
 import time
 
@@ -14,75 +14,70 @@ from dlADMM.input_data import mnist, fashion_mnist
 # initialize the neural network
 def Net(images, label, num_of_neurons):
     seed_num = 13
-    np.random.seed(seed=seed_num)
-    W1 = np.random.normal(0, 0.1, size=(num_of_neurons, 28 * 28))
-    np.random.seed(seed=seed_num)
-    b1 = np.random.normal(0, 0.1, size=(num_of_neurons, 1))
-    z1 = np.matmul(W1, images) + b1
+    tf.random.set_seed(seed=seed_num)
+    W1 = tf.Variable(tf.random.normal(shape=(num_of_neurons, 28 * 28),mean=0,stddev=0.1))
+    tf.random.set_seed(seed=seed_num)
+    b1 = tf.Variable(tf.random.normal(shape=(num_of_neurons, 1),mean=0,stddev=0.1))
+    z1 = tf.matmul(W1, images) + b1
     a1 = common.relu(z1)
-    np.random.seed(seed=seed_num)
-    W2 = np.random.normal(0, 0.1, size=(num_of_neurons, num_of_neurons))
-    np.random.seed(seed=seed_num)
-    b2 = np.random.normal(0, 0.1, size=(num_of_neurons, 1))
-    z2 = np.matmul(W2, a1) + b2
+    tf.random.set_seed(seed=seed_num)
+    W2 = tf.Variable(tf.random.normal(shape=(num_of_neurons, num_of_neurons),mean=0,stddev=0.1))
+    tf.random.set_seed(seed=seed_num)
+    b2 = tf.Variable(tf.random.normal(shape=(num_of_neurons, 1),mean=0,stddev=0.1))
+    z2 = tf.matmul(W2, a1) + b2
     a2 = common.relu(z2)
-    np.random.seed(seed=seed_num)
-    W3 = np.random.normal(0, 0.1, size=(10, num_of_neurons))
-    np.random.seed(seed=seed_num)
-    b3 = np.random.normal(0, 0.1, size=(10, 1))
-    z3 = np.ones(label.shape)
-    z3[label == 0] = -1
-    z3[label == 1] = 1
+    tf.random.set_seed(seed=seed_num)
+    W3 = tf.Variable(tf.random.normal(shape=(10, num_of_neurons),mean=0,stddev=0.1))
+    tf.random.set_seed(seed=seed_num)
+    b3 = tf.Variable(tf.random.normal(shape=(10, 1),mean=0,stddev=0.1))
+    imask = tf.equal(label, 0)
+    z3 = tf.where(imask, -tf.ones_like(label), tf.ones_like(label))
     return W1, b1, z1, a1, W2, b2, z2, a2, W3, b3, z3
 
 
 # return the accuracy of the neural network model
 def test_accuracy(W1, b1, W2, b2, W3, b3, images, labels):
     nums = labels.shape[1]
-    z1 = np.matmul(W1, images) + b1
+    z1 = tf.matmul(W1, images) + b1
     a1 = common.relu(z1)
-    z2 = np.matmul(W2, a1) + b2
+    z2 = tf.matmul(W2, a1) + b2
     a2 = common.relu(z2)
-    z3 = np.matmul(W3, a2) + b3
+    z3 = tf.matmul(W3, a2) + b3
     cost = common.cross_entropy_with_softmax(labels, z3) / nums
-    pred = np.argmax(labels, axis=0)
-    label = np.argmax(z3, axis=0)
-    return (np.sum(np.equal(pred, label)) / nums, cost)
+    actual = tf.argmax(labels, axis=0)
+    pred = tf.argmax(z3, axis=0)
+    return (tf.reduce_sum(tf.cast(tf.equal(pred, actual),tf.float32)) / nums,cost)
 
 
 # return the value of the augmented Lagrangian
 def objective(x_train, y_train, W1, b1, z1, a1, W2, b2, z2, a2, W3, b3, z3, u, v1, v2, rho):
-    r1 = np.sum((z1 - mul(W1, x_train) - b1) * (z1 - mul(W1, x_train) - b1))
-    r2 = np.sum((z2 - mul(W2, a1) - b2) * (z2 - mul(W2, a1) - b2))
-    r3 = np.sum((z3 - mul(W3, a2) - b3) * (z3 - mul(W3, a2) - b3))
+    r1 = tf.reduce_sum((z1 - tf.matmul(W1, x_train) - b1) * (z1 - tf.matmul(W1, x_train) - b1))
+    r2 = tf.reduce_sum((z2 - tf.matmul(W2, a1) - b2) * (z2 - tf.matmul(W2, a1) - b2))
+    r3 = tf.reduce_sum((z3 - tf.matmul(W3, a2) - b3) * (z3 - tf.matmul(W3, a2) - b3))
     loss = common.cross_entropy_with_softmax(y_train, z3)
-    obj = loss + np.trace(mul(z3 - mul(W3, a2) - b3, np.transpose(u)))
+    obj = loss + tf.linalg.trace(tf.matmul(z3 - tf.matmul(W3, a2) - b3, tf.transpose(u)))
     obj = obj + rho / 2 * r1 + rho / 2 * r2 + rho / 2 * r3
-    obj = obj + rho / 2 * np.sum((a1 - common.relu(z1) + v1) * (a1 - common.relu(z1) + v1)) + rho / 2 * np.sum(
+    obj = obj + rho / 2 * tf.reduce_sum((a1 - common.relu(z1) + v1) * (a1 - common.relu(z1) + v1)) + rho / 2 * tf.reduce_sum(
         (a2 - common.relu(z2) + v2) * (a2 - common.relu(z2) + v2))
     return obj
 
 
 mnist = mnist()
 # initialization
-x_train = mnist.train.xs
-y_train = mnist.train.ys
-x_train = np.swapaxes(x_train, 0, 1)
-y_train = np.swapaxes(y_train, 0, 1)
-x_train = np.array(x_train)
-y_train = np.array(y_train)
-x_test = mnist.test.xs
-y_test = mnist.test.ys
-x_test = np.swapaxes(x_test, 0, 1)
-y_test = np.swapaxes(y_test, 0, 1)
-x_test = np.array(x_test)
-y_test = np.array(y_test)
+x_train = mnist.train.xs.astype(np.float32)
+y_train = mnist.train.ys.astype(np.float32)
+x_train = tf.transpose(x_train)
+y_train = tf.transpose(y_train)
+x_test = mnist.test.xs.astype(np.float32)
+y_test = mnist.test.ys.astype(np.float32)
+x_test = tf.transpose(x_test)
+y_test = tf.transpose(y_test)
 
 num_of_neurons = 1000
-ITER = 10000
+ITER = 200
 index = 0
 W1, b1, z1, a1, W2, b2, z2, a2, W3, b3, z3 = Net(x_train, y_train, num_of_neurons)
-u = np.zeros(z3.shape)
+u = tf.zeros(z3.shape)
 t = 0
 train_acc = np.zeros(ITER)
 test_acc = np.zeros(ITER)
@@ -122,19 +117,19 @@ for i in range(ITER):
     W3 = common.update_W(a2, b3, z3, W3, u, rho, theta)
     b3 = common.update_b(a2, W3, z3, b3, u, rho)
     z3 = common.update_zl(a2, W3, b3, y_train, z3, u, rho)
-    u = u + rho * (z3 - mul(W3, a2) - b3)
+    u = u + rho * (z3 - tf.matmul(W3, a2) - b3)
     print("Time per iteration:", time.time() - pre)
-    r1 = np.sum((z1 - mul(W1, x_train) - b1) * (z1 - mul(W1, x_train) - b1))
-    r2 = np.sum((z2 - mul(W2, a1) - b2) * (z2 - mul(W2, a1) - b2))
-    r3 = np.sum((z3 - mul(W3, a2) - b3) * (z3 - mul(W3, a2) - b3))
+    r1 = tf.reduce_sum((z1 - tf.matmul(W1, x_train) - b1) * (z1 - tf.matmul(W1, x_train) - b1))
+    r2 = tf.reduce_sum((z2 - tf.matmul(W2, a1) - b2) * (z2 - tf.matmul(W2, a1) - b2))
+    r3 = tf.reduce_sum((z3 - tf.matmul(W3, a2) - b3) * (z3 - tf.matmul(W3, a2) - b3))
     linear_r[i] = r3
 
     obj = objective(x_train, y_train, W1, b1, z1, a1, W2, b2, z2, a2, W3, b3, z3, u, 0, 0, rho)
-    print("obj=", obj)
-    objective_value[i] = obj
-    print("r1=", r1)
-    print("r2=", r2)
-    print("r3=", r3)
+    print("obj=", obj.numpy())
+    objective_value[i] = obj.numpy()
+    print("r1=", r1.numpy())
+    print("r2=", r2.numpy())
+    print("r3=", r3.numpy())
     print("rho=", rho)
     (train_acc[i], train_cost[i]) = test_accuracy(W1, b1, W2, b2, W3, b3, x_train, y_train)
     print("training cost:", train_cost[i])

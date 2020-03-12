@@ -1,6 +1,6 @@
 # coding: utf-8
 
-import cupy as np
+import numpy as np
 import tensorflow as tf
 from keras.utils.np_utils import to_categorical
 

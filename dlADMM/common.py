@@ -1,11 +1,11 @@
-import cupy as np
-from cupy import matmul as mul
+import tensorflow as tf
+import numpy as np
 # return softmax
 def softmax(x):
-    return np.exp(x) / np.sum(np.exp(x), axis=0)
+    return tf.exp(x) / tf.reduce_sum(tf.exp(x), axis=0)
 # return cross entropy
 def cross_entropy(label, prob):
-    loss = -np.sum(label * np.log(prob))
+    loss = -tf.reduce_sum(label * tf.math.log(prob))
     return loss
 # return the cross entropy loss function
 def cross_entropy_with_softmax(label, z):
@@ -14,44 +14,44 @@ def cross_entropy_with_softmax(label, z):
     return loss
 #return the  relu function
 def relu(x):
-    return np.maximum(x, 0)
+    return tf.maximum(x, 0)
 # return phi
 def eq1(a, W_next, b_next, z_next, u_next,rho):
-    temp = z_next - mul(W_next, a) - b_next+u_next/rho
-    res = rho / 2 * np.sum(temp * temp)
+    temp = z_next - tf.matmul(W_next, a) - b_next+u_next/rho
+    res = rho / 2 * tf.reduce_sum(temp * temp)
     return res
 # return the derivative of phi with regard to a
 def eq1_a(a, W_next, b_next, z_next, u_next,rho):
-    res = rho * mul(np.transpose(W_next), mul(W_next, a) + b_next - z_next-u_next/rho)
+    res = rho * tf.matmul(tf.transpose(W_next), tf.matmul(W_next, a) + b_next - z_next-u_next/rho)
     return res
 # return the derivative of phi with regard to W
 def eq1_W(a, W_next, b_next, z_next, u_next,rho):
-    temp = mul(W_next, a) + b_next - z_next-u_next/rho
-    temp2 = a.T
-    res = rho * mul(temp, temp2)
+    temp = tf.matmul(W_next, a) + b_next - z_next-u_next/rho
+    temp2 = tf.transpose(a)
+    res = rho * tf.matmul(temp, temp2)
     return res
 # return the derivative of phi with regard to b
 def eq1_b(a, W_next, b_next, z_next,u_next, rho):
-    res = np.mean(rho * (mul(W_next, a) + b_next - z_next-u_next/rho), axis=1).reshape(-1, 1)
+    res = tf.reshape(tf.math.reduce_mean(rho * (tf.matmul(W_next, a) + b_next - z_next-u_next/rho), axis=1),shape=(-1, 1))
     return res
 # return the derivative of phi with regard to z
 def eq1_z(a, W_next, b_next, z_next, u_next, rho):
-    res = rho * (z_next - b_next - mul(W_next, a)+u_next/rho)
+    res = rho * (z_next - b_next - tf.matmul(W_next, a)+u_next/rho)
     return res
 # return the quadratic approximation of W-subproblem
 def P(W_new, theta, a_last, W, b, z, u,rho):
     temp = W_new - W
-    res = eq1(a_last, W, b, z, u,rho) + np.sum(eq1_W(a_last, W, b, z, u,rho) * temp) + np.sum(theta * temp * temp) / 2
+    res = eq1(a_last, W, b, z, u,rho) + tf.reduce_sum(eq1_W(a_last, W, b, z, u,rho) * temp) + tf.reduce_sum(theta * temp * temp) / 2
     return res
 # return the quadratic approximation of a-subproblem
 def Q(a_new, tau, a, W_next, b_next, z_next, u_next,v,z,rho):
     temp = a_new - a
-    res = a_obj(a, W_next, b_next, z_next, u_next,v,z,rho) + np.sum(a_obj_gradient(a, W_next, b_next, z_next, u_next,v,z,rho) * temp) + np.sum(
+    res = a_obj(a, W_next, b_next, z_next, u_next,v,z,rho) + tf.reduce_sum(a_obj_gradient(a, W_next, b_next, z_next, u_next,v,z,rho) * temp) + tf.reduce_sum(
         tau * temp * temp) / 2
     return res
 # return the objective value of a-subproblem
 def a_obj(a, W_next, b_next, z_next, u_next,v,z,rho):
-    res=eq1(a, W_next, b_next, z_next, u_next,rho)+rho/2*np.sum((a-relu(z)+v)*(a-relu(z)+v))
+    res=eq1(a, W_next, b_next, z_next, u_next,rho)+rho/2*tf.reduce_sum((a-relu(z)+v)*(a-relu(z)+v))
     return res
 # return the gradient of a-subproblem
 def a_obj_gradient(a, W_next, b_next, z_next, u_next,v,z,rho):
@@ -75,18 +75,18 @@ def update_b(a_last, W, z, b_old, u,rho):
     return res
 # return the objective value of z-subproblem
 def z_obj(a_last, W, b, z, u,v,a,rho):
-    f=(z-mul(W,a_last)-b+u/rho)*(z-mul(W,a_last)-b+u/rho)+(a-relu(z)+v)*(a-relu(z)+v)
+    f=(z-tf.matmul(W,a_last)-b+u/rho)*(z-tf.matmul(W,a_last)-b+u/rho)+(a-relu(z)+v)*(a-relu(z)+v)
     return f
 # return the result of z-subproblem
 def update_z(a_last, W, b, a,z_old, u,v,rho):
-    z1=np.matmul(W,a_last)+b-u/rho;
+    z1=tf.matmul(W,a_last)+b-u/rho;
     z2=(z1+a+v)/2
-    z1=np.minimum(z1,0)
-    z2=np.maximum(z2,0)
+    z1=tf.minimum(z1,0)
+    z2=tf.maximum(z2,0)
     value1=z_obj(a_last, W, b, z1, u,v,a,rho)
     value2=z_obj(a_last, W, b, z2, u,v,a,rho)
-    z=z1
-    z[value1>value2]=z2[value1>value2]
+    imask =tf.greater(value1,value2)
+    z=tf.where(imask,z2,z1)
     return z
 # return the result of z_L-subproblem by FISTA
 def update_zl(a_last, W, b, label, zl_old, u,rho):
@@ -99,7 +99,7 @@ def update_zl(a_last, W, b, label, zl_old, u,rho):
     TOLERANCE = 1e-3
     for i in range(MAX_ITER):
         fzl_old = fzl
-        fzl = cross_entropy_with_softmax(label, zl)+rho/2*np.sum((zl-mul(W,a_last)-b+u/rho)*(zl-mul(W,a_last)-b+u/rho))
+        fzl = cross_entropy_with_softmax(label, zl)+rho/2*tf.reduce_sum((zl-tf.matmul(W,a_last)-b+u/rho)*(zl-tf.matmul(W,a_last)-b+u/rho))
         if abs(fzl - fzl_old) < TOLERANCE:
             break
         lamda_old = lamda
@@ -107,7 +107,7 @@ def update_zl(a_last, W, b, label, zl_old, u,rho):
         gamma = (1 - lamda_old) / lamda
         gradients2 = (softmax(zl) - label)
         zeta_old = zeta
-        zeta = (rho * (mul(W, a_last)+b-u/rho) + (zl - eta * gradients2) / eta) / (rho + 1 / eta)
+        zeta = (rho * (tf.matmul(W, a_last)+b-u/rho) + (zl - eta * gradients2) / eta) / (rho + 1 / eta)
         zl = (1 - gamma) * zeta + gamma * zeta_old
     return zl
 # return the result of a-subproblem
