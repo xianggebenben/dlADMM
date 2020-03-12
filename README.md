@@ -42,8 +42,6 @@ publisher = {Association for Computing Machinery},
 
 address = {New York, NY, USA},
 
-url = {https://doi.org/10.1145/3292500.3330936},
-
 doi = {10.1145/3292500.3330936},
 
 booktitle = {Proceedings of the 25th ACM SIGKDD International Conference on Knowledge Discovery and Data Mining},
@@ -57,3 +55,6 @@ location = {Anchorage, AK, USA},
 series = {KDD ’19}
 
 }
+
+By the way, the previous paper on training neural networks via ADMM "Training Neural Networks Without Gradients:
+A Scalable ADMM Approach" has published their code at https://gitlab.umiacs.umd.edu/tomg/admm_nets.
