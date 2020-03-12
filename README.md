@@ -1,4 +1,5 @@
 Update: The dlADMM code is optimized without the cupy library and runs much faster. Each iteration takes several seconds.
+-------------------------------------------------------------------------------------------------------------------------
 
 # dlADMM: Deep Learning Optimization via Alternating Direction Method of Multipliers
 This is a  implementation of deep learning Alternating Direction Method of Multipliers(dlADMM) for the task of fully-connected neural network
