@@ -1,4 +1,4 @@
-Update: The dlADMM code is optimized without the cupy library and runs much faster. Each iteration takes only several seconds.
+Update: The dlADMM code is optimized without the cupy library and runs 10 times faster than the previous version. Each iteration takes only several seconds.
 -------------------------------------------------------------------------------------------------------------------------
 
 # dlADMM: Deep Learning Optimization via Alternating Direction Method of Multipliers
