@@ -1,16 +1,19 @@
 import tensorflow as tf
 import numpy as np
 # return softmax
-def softmax(x):
-    return tf.exp(x) / tf.reduce_sum(tf.exp(x), axis=0)
-# return cross entropy
-def cross_entropy(label, prob):
-    loss = -tf.reduce_sum(label * tf.math.log(prob))
-    return loss
-# return the cross entropy loss function
-def cross_entropy_with_softmax(label, z):
-    prob = softmax(z)
+def cross_entropy_with_softmax(label, zl):
+    prob = softmax(zl)
+    imask =tf.equal(prob,0.0)
+    prob = tf.where(imask,1e-10,prob)
     loss = cross_entropy(label, prob)
+    return loss
+def softmax(x):
+    exp =tf.math.exp(x)
+    imask =tf.equal(exp,float("inf"))
+    exp = tf.where(imask,tf.math.exp(88.6),exp)
+    return exp/(tf.math.reduce_sum(exp,axis=0)+1e-10)
+def cross_entropy(label, prob):
+    loss = -tf.math.reduce_sum(label * tf.math.log(prob))
     return loss
 #return the  relu function
 def relu(x):
@@ -78,7 +81,7 @@ def z_obj(a_last, W, b, z, u,v,a,rho):
     f=(z-tf.matmul(W,a_last)-b+u/rho)*(z-tf.matmul(W,a_last)-b+u/rho)+(a-relu(z)+v)*(a-relu(z)+v)
     return f
 # return the result of z-subproblem
-def update_z(a_last, W, b, a,z_old, u,v,rho):
+def update_z(a_last, W, b, a, u,v,rho):
     z1=tf.matmul(W,a_last)+b-u/rho;
     z2=(z1+a+v)/2
     z1=tf.minimum(z1,0)
