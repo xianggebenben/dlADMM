@@ -1,4 +1,7 @@
-Update: The dlADMM code is optimized without the cupy library and runs 10 times faster than the previous version. Each iteration takes only several seconds.
+2021.6 Update: The pytorch and the tensorflow versions of the dlADMM code are available.
+-------------------------------------------------------------------------------------------------------------------------
+
+2020.4 Update: The dlADMM code is optimized without the cupy library and runs 10 times faster than the previous version. Each iteration takes only several seconds.
 -------------------------------------------------------------------------------------------------------------------------
 
 # dlADMM: Deep Learning Optimization via Alternating Direction Method of Multipliers
@@ -8,14 +11,19 @@ problem, as described in our paper:
 Junxiang Wang, Fuxun Yu, Xiang Chen, and Liang Zhao. [ADMM for Efficient Deep Learning with Global Convergence.](https://arxiv.org/abs/1905.13611) (KDD 2019)
 
 ## Installation
-
 python setup.py install
 
 ## Requirements
+For the tensorflow version:
 
-tensorflow
+tensorflow==2.4.1
+numpy==1.16.4
 
-keras
+For the pytorch version:
+
+torch==1.8.1
+numpy==1.16.4
+
 
 ## Run the Demo
 
