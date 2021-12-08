@@ -67,5 +67,6 @@ series = {KDD ’19}
 
 The previous paper on training neural networks via ADMM "Training Neural Networks Without Gradients:
 A Scalable ADMM Approach" has published their code at https://gitlab.umiacs.umd.edu/tomg/admm_nets.
-
+<body>
 <a href="https://clustrmaps.com/site/1bllh"  title="Visit tracker"><img src="//www.clustrmaps.com/map_v2.png?d=GcSu9N6M4M7jj9_pCtPmBSOvv66gEqaPGg8B6PFuEx4&cl=ffffff" /></a>
+ </body>
