@@ -3,8 +3,8 @@ import os
 import numpy as np
 import argparse
 import time
-import dlADMM.common as common
-import dlADMM.input_data as input_data
+import GCN.pytorch_version.dlADMM.common as common
+import GCN.pytorch_version.dlADMM.input_data as input_data
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 mem_init = torch.cuda.memory_allocated(device=device)
 # =================== parameters ===================
@@ -72,27 +72,6 @@ obj = np.zeros(args.epochs)
 
 time_avg = 0
 min_epoch = 0
-if os.path.exists('gcn_admm_' + args.dataset + '_' + repr(args.hidden) + '.pt') \
-        and os.path.exists('gcn_admm_' + args.dataset + '_performance_' + repr(args.hidden) + '.pt'):
-    admm_var = torch.load('gcn_admm_' + args.dataset + '_' + repr(args.hidden) + '.pt', map_location=device)
-    rho = admm_var['rho']
-    z1 = admm_var['z1'].to(device)
-    z2 = admm_var['z2'].to(device)
-    w1 = admm_var['w1'].to(device)
-    w2 = admm_var['w2'].to(device)
-    y2 = admm_var['y2'].to(device)
-    min_epoch = admm_var['epoch']
-    admm_per = torch.load('gcn_admm_' + args.dataset + '_performance_' + repr(args.hidden) + '.pt', map_location=device)
-    admm_train_acc = admm_per["train_acc"]
-    admm_train_loss = admm_per["train_cost"]
-    admm_test_acc = admm_per["test_acc"]
-    admm_test_loss = admm_per["test_cost"]
-    pres = admm_per["pres"]
-    dres = admm_per["dres"]
-    obj = admm_per["obj"]
-
-
-
 for epoch in range(min_epoch, args.epochs):
     pre = time.time()
     print("----------------------------------------------")

@@ -1,6 +1,7 @@
-2021.6 Update: The pytorch and the tensorflow versions of the dlADMM code are available.
+2021.12 Update: The pytorch version of the dlADMM code for the GCN model are available.
 -------------------------------------------------------------------------------------------------------------------------
-
+2021.6 Update: The pytorch and the tensorflow versions of the dlADMM code for the MLP model are available.
+-------------------------------------------------------------------------------------------------------------------------
 2020.4 Update: The dlADMM code is optimized without the cupy library and runs 10 times faster than the previous version. Each iteration takes only several seconds.
 -------------------------------------------------------------------------------------------------------------------------
 
@@ -14,14 +15,26 @@ Junxiang Wang, Fuxun Yu, Xiang Chen, and Liang Zhao. [ADMM for Efficient Deep Le
 python setup.py install
 
 ## Requirements
+GCN
+
+For the pytorch version:
+
+torch==1.8.1
+
+numpy==1.21.2
+
+MLP
+
 For the tensorflow version:
 
 tensorflow==2.4.1
+
 numpy==1.16.4
 
 For the pytorch version:
 
 torch==1.8.1
+
 numpy==1.16.4
 
 

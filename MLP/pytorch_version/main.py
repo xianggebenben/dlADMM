@@ -7,8 +7,8 @@ if not sys.warnoptions:
     import warnings
 
     warnings.simplefilter("ignore")
-from pytorch_version.dlADMM import common
-from pytorch_version.dlADMM.input_data import mnist, fashion_mnist
+from MLP.pytorch_version.dlADMM import common
+from MLP.pytorch_version.dlADMM.input_data import mnist, fashion_mnist
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # initialize the neural network

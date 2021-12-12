@@ -7,8 +7,8 @@ if not sys.warnoptions:
     import warnings
 
     warnings.simplefilter("ignore")
-from tensorflow_version.dlADMM import common
-from tensorflow_version.dlADMM.input_data import mnist, fashion_mnist
+from MLP.tensorflow_version.dlADMM import common
+from MLP.tensorflow_version.dlADMM.input_data import mnist, fashion_mnist
 
 
 # initialize the neural network
