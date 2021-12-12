@@ -1,5 +1,4 @@
 import torch
-import os
 import numpy as np
 import argparse
 import time
@@ -71,8 +70,7 @@ dres = np.zeros(args.epochs)
 obj = np.zeros(args.epochs)
 
 time_avg = 0
-min_epoch = 0
-for epoch in range(min_epoch, args.epochs):
+for epoch in range(args.epochs):
     pre = time.time()
     print("----------------------------------------------")
     print(time.strftime("%Y-%m-%d-%H_%M_%S", time.localtime()))
