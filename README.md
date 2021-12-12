@@ -43,8 +43,9 @@ numpy==1.16.4
 python main.py
 
 ## Data
+For the MLP model, two benchmark datasets MNIST and Fashion-MNIST are included in this package.
 
-Two benchmark datasets MNIST and Fashion-MNIST are included in this package.
+For the GCN model, five benchmark datasets Cora, PubMed, Citeseer, Coauthor-CS and Coauthor-Physics are included in this package.
 
 ## Cite
 
@@ -80,6 +81,3 @@ series = {KDD ’19}
 
 The previous paper on training neural networks via ADMM "Training Neural Networks Without Gradients:
 A Scalable ADMM Approach" has published their code at https://gitlab.umiacs.umd.edu/tomg/admm_nets.
-<body>
-<a href="https://clustrmaps.com/site/1bllh"  title="Visit tracker"><img src="//www.clustrmaps.com/map_v2.png?d=GcSu9N6M4M7jj9_pCtPmBSOvv66gEqaPGg8B6PFuEx4&cl=ffffff" /></a>
- </body>
