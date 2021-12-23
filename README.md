@@ -84,8 +84,6 @@ Please cite our following paper if you use our GCN code in your own work:
 
 author = {Wang, Junxiang and Li, Hongyi and Zhao, Liang},
 
-title = {ADMM for Efficient Deep Learning with Global Convergence},
-
 year = {2021},
 
 title = {A Convergent ADMM Framework for Efficient Neural Network Training},
