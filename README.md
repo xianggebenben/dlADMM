@@ -48,7 +48,7 @@ For the MLP model, two benchmark datasets MNIST and Fashion-MNIST are included i
 For the GCN model, five benchmark datasets Cora, PubMed, Citeseer, Coauthor-CS and Coauthor-Physics are included in this package.
 
 ## Cite
-Please cite our following paper if you use our MLP code in your own work:
+Please cite our following paper if you use our code in your own work:
 
 @inproceedings{wang2019admm,
 
@@ -75,20 +75,6 @@ keywords = {alternating direction method of multipliers, deep learning, global c
 location = {Anchorage, AK, USA},
 
 series = {KDD ’19}
-
-}
-
-Please cite our following paper if you use our GCN code in your own work:
-
-@article{wang2021admm,
-
-author = {Wang, Junxiang and Li, Hongyi and Zhao, Liang},
-
-year = {2021},
-
-title = {A Convergent ADMM Framework for Efficient Neural Network Training},
-
-journal={arXiv preprint arXiv:2112.11619}
 
 }
 
